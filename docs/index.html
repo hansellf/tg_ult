@@ -1,38 +1,36 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.6">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+  <meta charset="UTF-8" />
+  <title>Buy Stickers</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-<body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Buy Stickers&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://telegram.org/js/telegram-web-app.js"&gt;&lt;/script&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body style="background:#121212; color:#fff; font-family:sans-serif; padding:2em;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h2&gt;Buy Sticker Pack&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;button onclick="buy()"&gt;Continue with Tonkeeper&lt;/button&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>async function buy() {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const initData = Telegram.WebApp.initData;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const url = `/pay?initData=${encodeURIComponent(initData)}`;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const res = await fetch(url);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const data = await res.json();</p>
-<p class="p1"><span class="Apple-converted-space">      </span>window.open(data.ton_link, '_blank');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+<body style="background:#121212; color:#fff; font-family:sans-serif; padding:2em;">
+  <h2>Buy Sticker Pack</h2>
+  <button id="buyBtn">Continue with Tonkeeper</button>
+
+  <script>
+    async function buy() {
+      // Use Telegram WebApp initData if inside Telegram, otherwise fallback to test JWT
+      const initData = Telegram.WebApp?.initData || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL3N0aWNrZXJkb20uc3RvcmUiLCJzdWIiOiIzODI3NjgxNDEiLCJhdWQiOlsiaHR0cHM6Ly9zdGlja2Vyb21kLnN0b3JlIl0sImV4cCI6MjI5NDY0NDAwMCwibmJmIjoxNjQ5MjU1MTE0LCJpYXQiOjE2NDkyNTUxMTQsImp0aSI6IjM0OGFhZGM3LTA5YmQtNDA2MC1iZTY5LWQ3ZTcxM2U4Y2MxNyJ9.5XvEBoCh95x6XOuqaY8qDnCCqxBFE7HRb6SRNau0D0A";
+
+      const url = `https://tg-ult.onrender.com/pay?initData=${encodeURIComponent(initData)}`;
+
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data.ton_link) {
+          window.open(data.ton_link, "_blank");
+        } else {
+          alert("No payment link received");
+        }
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    }
+
+    document.getElementById("buyBtn").onclick = buy;
+  </script>
 </body>
 </html>
